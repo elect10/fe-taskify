@@ -1,5 +1,5 @@
 import { moveTask } from "../../utils/storage/taskManager.js";
-
+import { historyObserver } from "../history/historyObserver.js";
 export const dragStartCard = (target) => {
   target.classList.add("dragging");
 
@@ -53,6 +53,13 @@ export const dragendCard = (target) => {
   startCol.querySelector(".column-count").textContent--;
   const endCol = target.closest(".column").querySelector(".column-count")
     .textContent++;
+
+  console.log(target);
+  historyObserver.notify("MOVE", {
+    title: target.querySelector(".task-title").textContent,
+    from: startCol.getAttribute("data-column-key"),
+    to: target.closest(".column").getAttribute("data-column-key"),
+  });
 
   target.removeAttribute("data-start-column");
 };

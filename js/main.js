@@ -5,8 +5,10 @@ import { editCard, closeEditModal } from "./card/editCard.js";
 import { sort } from "./sort.js";
 import { deleteCard, closeDeleteModal } from "./card/deleteCard.js";
 import { dragendCard, dragoverCard, dragStartCard } from "./card/moveCard.js";
-import { showHistoryModal } from "./history/historyModal.js";
+import { historyObserver } from "./history/historyObserver.js";
 import { addHistory, getHistory } from "../utils/storage/historyManager.js";
+import { historyModal } from "./history/historyModal.js";
+import { getTaskByTimestamp } from "../utils/storage/taskManager.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   setDefaultColumn();
@@ -40,35 +42,50 @@ document.addEventListener("click", ({ target }) => {
       timestamp: Date.now(),
     };
     makeCard(task, parentColumn);
-
-    addHistory(
-      task.timestamp,
-      "ADD",
-      task.title,
-      parentColumn.getAttribute("data-column-key"),
-      "empty"
-    );
+    historyObserver.notify("ADD", {
+      title: task.title,
+      column: parentColumn.getAttribute("data-column-key"),
+    });
   } else if (target.classList.contains("task-add-can-btn")) {
     // 취소 버튼 클릭시
     closeCardModal(parentColumn);
   } else if (target.closest(".sort-btn")) {
     sort(target.closest(".sort-btn").getAttribute("card-sort"));
   } else if (target.closest(".card-close-btn")) {
+    const storedTask = getTaskByTimestamp(
+      task.closest(".column").getAttribute("data-column-key"),
+      parseInt(task.getAttribute("data-timestamp"))
+    );
+
+    historyObserver.notify("DELETE", {
+      title: storedTask.title,
+      column: task.closest(".column").getAttribute("data-column-key"),
+    });
     deleteCard(task);
   } else if (target.closest(".task-delete-cancel-btn")) {
     closeDeleteModal(false, task);
   } else if (target.closest(".task-delete-confirm-btn")) {
     closeDeleteModal(true, task);
   } else if (target.closest(".card-edit-btn")) {
+    const storedTask = getTaskByTimestamp(
+      task.closest(".column").getAttribute("data-column-key"),
+      parseInt(task.getAttribute("data-timestamp"))
+    );
+    historyObserver.notify("EDIT", {
+      title: storedTask.title,
+      column: task.closest(".column").getAttribute("data-column-key"),
+    });
     editCard(task);
   } else if (target.closest(".task-edit-add-btn")) {
     closeEditModal(true, task);
   } else if (target.closest(".task-edit-can-btn")) {
     closeEditModal(false, task);
   } else if (target.closest(".history-btn")) {
-    showHistoryModal();
+    historyModal.show();
   } else if (target.closest(".history-modal-close-btn")) {
-    showHistoryModal();
+    historyModal.show();
+  } else if (target.closest(".history-modal-footer")) {
+    historyModal.clearAllHistory();
   }
 });
 

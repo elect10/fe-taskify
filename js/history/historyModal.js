@@ -1,60 +1,122 @@
-export const showHistoryModal = () => {
-  const modal = document.querySelector(".history-modal");
-  console.log(modal);
-  if (!modal) {
-    const newTask = document.createElement("div");
-    newTask.className = "history-modal";
-    newTask.innerHTML = `
-    <div class ="history-modal-header">
-      <div class =" history-modal-title display-bold16">
-        사용자 활동 기록
-      </div>
-      <button class = "history-modal-close-btn" >
-        <img src = "../assets/icon/closed_blue.svg" alt = "x">
-        <div class"history-modal-close-text display-bold14">닫기</div>
-      </button>
-    </div>
+import { historyObserver } from "./historyObserver.js";
+import { getHistory } from "../../utils/storage/historyManager.js";
+import { HistoryView } from "./historyView.js";
 
-    <div class ="history-modal-main">
-      <div class = "history">
+class HistoryModal {
+  constructor() {
+    this.histories = [];
+    this.view = new HistoryView();
+    historyObserver.subscribe(this);
+  }
 
-        <div class = "history-profile-icon">
-          <img src="../assets/icon/profile-icon.png" alt="profile" style="border-radius:100px">
+  update(action, data) {
+    const history = {
+      timestamp: Date.now(),
+      functionType: action,
+      title: data.title,
+      column: data.column || data.from,
+      columnTogo: data.to || "empty",
+    };
+
+    this.histories.push(history);
+    this.view.updateHistoryUI({
+      timestamp: history.timestamp,
+      action: history.functionType,
+      data: {
+        title: history.title,
+        from: history.column,
+        to: history.columnTogo,
+      },
+    });
+
+    // localStorage에 저장
+    const storedHistory = getHistory() || [];
+    const updatedHistory = [...storedHistory, history];
+    console.log(updatedHistory);
+    localStorage.setItem("history", JSON.stringify(updatedHistory));
+  }
+
+  show() {
+    const modal = document.querySelector(".history-modal");
+    if (!modal) {
+      const newModal = document.createElement("div");
+      newModal.className = "history-modal";
+      newModal.innerHTML = `
+        <div class="history-modal-header">
+          <div class="history-modal-title display-bold16">
+            사용자 활동 기록
+          </div>
+          <button class="history-modal-close-btn">
+            <img src="../assets/icon/closed_blue.svg" alt="x">
+            <div class="history-modal-close-text display-bold14">닫기</div>
+          </button>
         </div>
-
-        <div class ="history-body">
-          <div class = "history-username display-Medium14">
-            멋진삼
-          </div>
-          <div class = "history-content display-Medium14 ">
-            블로그에 포스팅할 것을(를) 하고있는 일에서 해야할 일으로 이동하였습니다.
-          </div>
-          <div class = "history-timestmamp display-Medium12">
-            3분전
-          </div>
+        <div class="history-modal-main">
         </div>
+        <div class="history-modal-footer display-bold14">
+          기록 전체 삭제
+        </div>
+      `;
 
-      </div>
-    </div>
-      
-    <div class ="history-modal-footer display-bold14">
-      기록 전체 삭제
-    </div>
-  `;
-    document.body.appendChild(newTask);
-    // 애니메이션이 시작되도록 약간의 지연 후 클래스 추가
-    setTimeout(() => {
-      newTask.classList.add("show");
-    }, 10);
-  } else {
-    if (modal.classList.contains("close")) {
-      // close 클래스가 있으면 제거하고 show 클래스 추가
-      modal.classList.remove("close");
-      modal.classList.add("show");
+      document.body.appendChild(newModal);
+      this.renderStoredHistories();
+
+      setTimeout(() => {
+        newModal.classList.add("show");
+      }, 10);
     } else {
-      // show 클래스가 있으면 제거하고 close 클래스 추가
-      modal.classList.remove("show");
-      modal.classList.add("close");
+      this.close();
     }
   }
-};
+
+  close() {
+    const modal = document.querySelector(".history-modal");
+    if (modal) {
+      modal.classList.remove("show");
+      modal.classList.add("close");
+      setTimeout(() => {
+        modal.remove();
+      }, 300);
+    }
+  }
+
+  renderStoredHistories() {
+    const histories = getHistory() || [];
+    const modalMain = document.querySelector(".history-modal-main");
+    histories.reverse().forEach((history) => {
+      const historyElement = this.view.createHistoryElement({
+        timestamp: history.timestamp,
+        action: history.functionType,
+        data: {
+          title: history.title,
+          from: history.column,
+          to: history.columnTogo,
+        },
+      });
+      modalMain.appendChild(historyElement);
+    });
+  }
+
+  clearAllHistory() {
+    localStorage.removeItem("history");
+    const modal = document.querySelector(".history-modal");
+    modal.innerHTML = `
+        <div class="history-modal-header">
+          <div class="history-modal-title display-bold16">
+            사용자 활동 기록
+          </div>
+          <button class="history-modal-close-btn">
+            <img src="../assets/icon/closed_blue.svg" alt="x">
+            <div class="history-modal-close-text display-bold14">닫기</div>
+          </button>
+        </div>
+        <div class="history-modal-main">
+        </div>
+        <div class="history-modal-footer display-bold14">
+          기록 전체 삭제
+        </div>
+      `;
+  }
+}
+
+export const historyModal = new HistoryModal();

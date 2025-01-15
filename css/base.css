@@ -321,6 +321,11 @@ footer {
   height: 16px;
 }
 
+.history-modal-main {
+  overflow: scroll;
+  max-height: 560px;
+}
+
 .history {
   display: flex;
   flex-direction: row;
