@@ -1,12 +1,12 @@
 import { moveTask } from "../../utils/storage/taskManager.js";
-import { addHistory } from '../../utils/storage/historyManager.js';
+import { addHistory } from "../../utils/storage/historyManager.js";
 
 export const dragStartCard = (target) => {
   target.classList.add("dragging");
 
   const startColumnKey = target
-  .closest(".column")
-  .getAttribute("data-column-key");
+    .closest(".column")
+    .getAttribute("data-column-key");
 
   target.setAttribute("data-start-column", startColumnKey);
 };
@@ -28,24 +28,22 @@ export const dragoverCard = (e) => {
 
       if (afterCard) {
         column.insertBefore(draggingCard, afterCard);
-        moveTask(
-          parseInt(draggingCard.getAttribute("data-timestamp")),
-          parseInt(draggingCard.getAttribute("data-start-column")),
-          parseInt(column.getAttribute("data-column-key"))
-        );
       } else {
         column.appendChild(draggingCard);
-        moveTask(
-          parseInt(draggingCard.getAttribute("data-timestamp")),
-          parseInt(draggingCard.getAttribute("data-start-column")),
-          parseInt(column.getAttribute("data-column-key"))
-        );
       }
     }
   });
 };
 
 export const dragendCard = (target) => {
+  const draggingCard = document.querySelector(".dragging");
+
+  moveTask(
+    parseInt(draggingCard.getAttribute("data-timestamp")),
+    parseInt(draggingCard.getAttribute("data-start-column")),
+    parseInt(target.closest(".column").getAttribute("data-column-key"))
+  );
+
   target.classList.remove("dragging");
   const startColNum = target.getAttribute("data-start-column");
   const startCol = document.querySelector(
