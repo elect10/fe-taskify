@@ -4,9 +4,10 @@ import {
   getTaskByTimestamp,
   removeTask,
 } from "../utils/storage/taskManager.js";
-import { setDefaultColumn } from "./setColumn.js";
+import { deleteCard } from "./card/deleteCard.js";
+import { setDefaultColumn } from "../utils/setColumn.js";
 import { editCard, closeEditModal } from "./card/editCard.js";
-import { sort } from "./sort.js";
+import { sort } from "../utils/sort.js";
 import { dragendCard, dragoverCard, dragStartCard } from "./card/moveCard.js";
 import { showHistoryModal } from "./history/historyModal.js";
 import {
@@ -18,8 +19,8 @@ import { showWarningModal } from "../utils/storage/warningModal.js";
 
 document.addEventListener("DOMContentLoaded", () => {
   setDefaultColumn();
-
   const columns = document.querySelectorAll(".column");
+
   columns.forEach((column) => {
     const columnKey = column.getAttribute("data-column-key");
     const tasks = getColumnTasks(columnKey);
@@ -72,7 +73,6 @@ document.addEventListener("click", ({ target }) => {
       task.closest(".column").getAttribute("data-column-key"),
       parseInt(task.getAttribute("data-timestamp"))
     );
-
     addHistory(
       storedTask.timestamp,
       "EDIT",
@@ -94,32 +94,11 @@ document.addEventListener("click", ({ target }) => {
   } else if (target.closest(".warning-modal-cancel-btn")) {
     if (target.closest(".history")) {
       //히스토리 지우기 로직
-
       document.querySelector(".warning-modal").remove();
-
       clearHistory();
     } else if (target.closest(".task-for-delete")) {
       // 카드 지우기 로직
-
-      document.querySelector(".warning-modal").remove();
-      const dyingTask = document.querySelector(".task[ready-for-deleted]");
-      const colForDyingTask = dyingTask
-        .closest(".column")
-        .getAttribute("data-column-key");
-
-      addHistory(
-        parseInt(dyingTask.getAttribute("data-timestamp")),
-        "DELETE",
-        dyingTask.querySelector(".task-title").innerText,
-        colForDyingTask,
-        "empty"
-      );
-      removeTask(
-        dyingTask.closest(".column").getAttribute("data-column-key"),
-        dyingTask.getAttribute("data-timestamp")
-      );
-      dyingTask.closest(".column").querySelector(".column-count").textContent--;
-      dyingTask.remove();
+      deleteCard();
     }
   }
 });

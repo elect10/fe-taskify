@@ -8,29 +8,20 @@
 ├── `index.html`                # Main HTML file
 │
 ├── `assets`                    # Static files (images, fonts, etc.)
-│   ├── `images`                # Image files
+│   ├── `icon`                # Icon files
 │   └── `fonts`                 # Font files
 │
 ├── `css`                       # Style files
-│   ├── `base.css`              # Base styles
-│   ├── `header.css`            # Header styles
-│   ├── `footer.css`            # Footer styles
-│   ├── `main.css`              # Main page styles
-│   ├── `card.css`              # Card styles
-│   ├── `modal.css`             # Modal styles
-│   ├── `animations.css`        # Animation styles
-│   ├── `history.css`           # History modal styles
-│   └── `column.css`            # Column styles ( card lists )
+│   └──`base.css`              # styles
 │
 ├── `js`                    # JavaScript files ( Can be divided into more directories )
 │   ├── card               # Card functions (add, delete, edit, drag, drop, etc.)
 │   ├── column          # Column management functions (add, delete, rename, etc.)
-│   ├── history         # History management functions (undo, redo, etc.)
-│   ├── modal            # Modal functions (open, close, etc.)
+│   ├── history         # History management functions (observer pattern)
 │   ├── fab                # FAB button functions (add column, delete column, undo, redo, etc.)
 │   └── main.js           # Main JavaScript file
 │
-├── `utils`                      # Data storage files (e.g. `localStorage.js` )
+├── `utils`                      # Data storage files & any util functions (e.g. `localStorage.js` )
 
 ```
 
@@ -74,7 +65,7 @@
     - [x] Pop up
     - [x] List of Tasks
     - [x] Clear History
-      - [ ] Warning Modal
+      - [x] Warning Modal
     - [x] Close Modal
     - [x] Animation
     - [x] Bold for important words
