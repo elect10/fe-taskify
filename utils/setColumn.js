@@ -1,5 +1,5 @@
-import { getColumnTasks } from "../utils/storage/taskManager.js";
-import { addColumn } from "../utils/storage/columnManager.js";
+import { getColumnTasks } from "./storage/taskManager.js";
+import { addColumn } from "./storage/columnManager.js";
 
 export const getColumn = () => {
   let columnCount = 1;

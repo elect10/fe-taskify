@@ -4,9 +4,27 @@
 @import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable.min.css");
 
 body {
-  font-family: "Pretendard Bold", sans-serif;
   padding: 0 80px;
   background-color: rgba(247, 247, 252, 1);
+  font-family: "Pretendard Variable", -apple-system, BlinkMacSystemFont,
+    system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo",
+    "Noto Sans KR", "Malgun Gothic", "Apple Color Emoji", "Segoe UI Emoji",
+    "Segoe UI Symbol", sans-serif;
+}
+
+button {
+  background: none;
+  border: none;
+  padding: 0;
+  font-family: inherit;
+  cursor: pointer;
+  outline: inherit;
+}
+
+input {
+  border: none;
+  outline: none;
+  font: inherit;
 }
 
 header {
@@ -16,6 +34,44 @@ header {
   align-items: center;
   font-size: 24px;
   font-weight: 700;
+}
+
+.display-bold14 {
+  font-family: "Pretendard Variable";
+  font-size: 14px;
+  line-height: 16.41px;
+  text-align: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  font-weight: 700;
+}
+
+.display-bold16 {
+  font-family: "Pretendard Variable";
+  font-size: 16px;
+  line-height: 18.75px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  font-weight: 700;
+}
+
+.display-Medium14 {
+  font-family: Pretendard Variable;
+  font-size: 14px;
+  line-height: 16.41px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+}
+
+.display-Medium12 {
+  font-family: Pretendard Variable;
+  font-size: 12px;
+  line-height: 14.06px;
+  text-align: left;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
 }
 
 .logo {
@@ -58,7 +114,7 @@ main {
 }
 
 .task-list {
-  width: 320px;
+  width: 300px;
   height: 24px;
   margin: 0 10px 0 10px;
   display: flex;
@@ -77,18 +133,42 @@ main {
 
 .column-title {
   font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   color: rgba(78, 75, 102, 1);
-  margin-right: 9px;
+}
+.column-count {
+  display: flex;
+  min-width: 16px;
+  height: 24px;
+  top: 20px;
+  left: 20px;
+  padding: 0px 4px 0px 4px;
+  gap: 0px;
+  border-radius: 8px;
+  border: 1px 0px 0px 0px;
+  opacity: 0px;
+  font-family: Pretendard Variable;
+  font-size: 12px;
+  line-height: 14.06px;
+  text-align: center;
+  align-items: center;
+  justify-content: center;
+  text-underline-position: from-font;
+  text-decoration-skip-ink: none;
+  color: rgba(160, 163, 189, 1);
+  border: 1px solid var(--border-default, rgba(239, 240, 246, 1));
 }
 
 .add-btn {
   position: absolute;
-  right: 40px;
+  right: 37px;
 }
 
 .delete-btn {
   position: absolute;
-  right: 9px;
+  right: 6px;
 }
 
 .card-delete-edit {
@@ -99,6 +179,23 @@ main {
 .card-edit-btn {
   background: none;
   border: none;
+}
+.edit-btn {
+  width: 140px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(254, 254, 254, 1);
+}
+.task-edit-can-btn {
+  background-color: rgba(247, 247, 252, 1);
+}
+
+.task-edit-add-btn {
+  background-color: rgba(0, 122, 255, 1);
+  color: rgba(247, 247, 252, 1);
 }
 
 .card-close-btn {
@@ -209,8 +306,149 @@ footer {
 .fab-plusicon {
   background: none;
   border: none;
+  margin-left: 6px;
+  margin-top: 1px;
 }
 
 .dragging {
   opacity: 30%;
+}
+
+.history-modal {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 64px;
+  right: -366px; /* 시작 위치를 화면 밖으로 */
+  width: 350px;
+  min-height: 121px;
+  max-height: 680px;
+  padding: 8px;
+  gap: 8px;
+  border-radius: 16px;
+  background-color: rgba(254, 254, 254, 1);
+  box-shadow: 0px 16px 16px 0px rgba(110, 128, 145, 0.24);
+}
+
+.history-modal.show {
+  transition: right 0.3s ease-in-out;
+  right: 48px; /* (1920px - 1018px - 366px) ≈ 48px, 화면 오른쪽에서의 여백 */
+}
+
+.history-modal.close {
+  transition: right 0.3s ease-in-out;
+  right: -400px; /* (1920px - 1018px - 366px) ≈ 48px, 화면 오른쪽에서의 여백 */
+}
+
+.history-modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 48px;
+  padding-left: 16px;
+}
+
+.history-modal-close-btn {
+  display: flex;
+  align-items: center;
+  width: 65px;
+  height: 32px;
+  background: none;
+  border: none;
+  color: rgba(110, 113, 145, 1);
+  font-weight: 600;
+  gap: 4px;
+}
+
+.history-modal-close-btn img {
+  width: 16px;
+  height: 16px;
+}
+
+.history-modal-main {
+  overflow: scroll;
+  max-height: 560px;
+}
+
+.history {
+  display: flex;
+  flex-direction: row;
+  width: 312px;
+  height: 81px;
+  padding: 16px;
+  gap: 16px;
+  box-shadow: 0px 0px 4px 0px rgba(110, 128, 145, 0.08);
+}
+
+.history-profile-icon {
+  display: flex;
+  width: 40px;
+  height: 40px;
+}
+
+.history-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.history-modal-footer {
+  display: flex;
+  height: 40px;
+  align-items: center;
+  justify-content: end;
+  color: rgba(255, 59, 48, 1);
+  padding-right: 20px;
+}
+
+/* styles.css 또는 적절한 CSS 파일에 추가 */
+.warning-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 반투명 배경 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000; /* 다른 요소 위에 표시 */
+}
+
+.warning-modal-content {
+  background-color: white;
+  padding: 32px 24px 24px 32px;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  width: 344px;
+  height: 86px;
+  text-align: center;
+  display: flex;
+  gap: 32px;
+  flex-direction: column;
+  justify-content: center;
+}
+.warning-modal-footer {
+  display: flex;
+  gap: 8px;
+  position: relative;
+  bottom: 10px;
+}
+
+.warn-btn {
+  width: 172px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(254, 254, 254, 1);
+}
+
+.warning-modal-confirm-btn {
+  background-color: rgba(247, 247, 252, 1);
+}
+.warning-modal-cancel-btn {
+  background-color: rgba(255, 59, 48, 1);
+  color: rgba(247, 247, 252, 1);
 }

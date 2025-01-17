@@ -1,4 +1,5 @@
 import { moveTask } from "../../utils/storage/taskManager.js";
+import { addHistory } from "../../utils/storage/historyManager.js";
 
 export const dragStartCard = (target) => {
   target.classList.add("dragging");
@@ -27,24 +28,22 @@ export const dragoverCard = (e) => {
 
       if (afterCard) {
         column.insertBefore(draggingCard, afterCard);
-        moveTask(
-          parseInt(draggingCard.getAttribute("data-timestamp")),
-          parseInt(draggingCard.getAttribute("data-start-column")),
-          parseInt(column.getAttribute("data-column-key"))
-        );
       } else {
         column.appendChild(draggingCard);
-        moveTask(
-          parseInt(draggingCard.getAttribute("data-timestamp")),
-          parseInt(draggingCard.getAttribute("data-start-column")),
-          parseInt(column.getAttribute("data-column-key"))
-        );
       }
     }
   });
 };
 
 export const dragendCard = (target) => {
+  const draggingCard = document.querySelector(".dragging");
+
+  moveTask(
+    parseInt(draggingCard.getAttribute("data-timestamp")),
+    parseInt(draggingCard.getAttribute("data-start-column")),
+    parseInt(target.closest(".column").getAttribute("data-column-key"))
+  );
+
   target.classList.remove("dragging");
   const startColNum = target.getAttribute("data-start-column");
   const startCol = document.querySelector(
@@ -53,6 +52,13 @@ export const dragendCard = (target) => {
   startCol.querySelector(".column-count").textContent--;
   const endCol = target.closest(".column").querySelector(".column-count")
     .textContent++;
+  addHistory(
+    parseInt(target.getAttribute("data-timestamp")),
+    "MOVE",
+    target.querySelector(".task-title").textContent,
+    startColNum,
+    target.closest(".column").getAttribute("data-column-key")
+  );
 
   target.removeAttribute("data-start-column");
 };

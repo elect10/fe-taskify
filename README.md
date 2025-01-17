@@ -8,29 +8,20 @@
 ├── `index.html`                # Main HTML file
 │
 ├── `assets`                    # Static files (images, fonts, etc.)
-│   ├── `images`                # Image files
+│   ├── `icon`                # Icon files
 │   └── `fonts`                 # Font files
 │
 ├── `css`                       # Style files
-│   ├── `base.css`              # Base styles
-│   ├── `header.css`            # Header styles
-│   ├── `footer.css`            # Footer styles
-│   ├── `main.css`              # Main page styles
-│   ├── `card.css`              # Card styles
-│   ├── `modal.css`             # Modal styles
-│   ├── `animations.css`        # Animation styles
-│   ├── `history.css`           # History modal styles
-│   └── `column.css`            # Column styles ( card lists )
+│   └──`base.css`              # styles
 │
 ├── `js`                    # JavaScript files ( Can be divided into more directories )
 │   ├── card               # Card functions (add, delete, edit, drag, drop, etc.)
 │   ├── column          # Column management functions (add, delete, rename, etc.)
-│   ├── history         # History management functions (undo, redo, etc.)
-│   ├── modal            # Modal functions (open, close, etc.)
+│   ├── history         # History management functions (observer pattern)
 │   ├── fab                # FAB button functions (add column, delete column, undo, redo, etc.)
 │   └── main.js           # Main JavaScript file
 │
-├── `utils`                      # Data storage files (e.g. `localStorage.js` )
+├── `utils`                      # Data storage files & any util functions (e.g. `localStorage.js` )
 
 ```
 
@@ -42,7 +33,7 @@
 3. Card Sorting ✅
 4. Card editing ( + delete) ✅
 5. Card moving ✅
-6. History manager
+6. History manager ✅
 7. Column manager
 8. FAB button
 9. Design
@@ -68,16 +59,16 @@
 
 ---
 
-- [ ] Header
-  - [ ] Logo
-  - [ ] History Modal
-    - [ ] Pop up
-    - [ ] List of Tasks
-    - [ ] Clear History
-      - [ ] Warning Modal
-    - [ ] Close Modal
-    - [ ] Animation
-    - [ ] Bold for important words
+- [x] Header
+  - [x] Logo
+  - [x] History Modal
+    - [x] Pop up
+    - [x] List of Tasks
+    - [x] Clear History
+      - [x] Warning Modal
+    - [x] Close Modal
+    - [x] Animation
+    - [x] Bold for important words
 
 ---
 
